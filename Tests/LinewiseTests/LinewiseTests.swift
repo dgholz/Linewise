@@ -1,4 +1,5 @@
 import XCTest
+import Foundation
 @testable import Linewise
 
 class LinewiseTests: XCTestCase {
