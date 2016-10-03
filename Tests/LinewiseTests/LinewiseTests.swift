@@ -31,6 +31,10 @@ class LinewiseTests: XCTestCase {
     static var allTests : [(String, (LinewiseTests) -> () throws -> Void)] {
         return [
             ("testGetLinesFromInputStream", testGetLinesFromInputStream),
+            ("testEmpty", testEmpty),
+            ("testOneChar", testOneChar),
+            ("testOneNewline", testOneNewline),
+            ("testTrailingNewline", testTrailingNewline),
         ]
     }
 }
