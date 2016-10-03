@@ -1,6 +1,8 @@
 # Linewise
 Swift protocol to add lines() to InputStreams. Line terminators get stripped.
 
+[![Build Status](https://travis-ci.org/dgholz/Linewise.svg?branch=master)](https://travis-ci.org/dgholz/Linewise)
+
 # How to use
 
     # Package.swift
