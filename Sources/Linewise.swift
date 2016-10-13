@@ -6,12 +6,13 @@ protocol Linewise {
 }
 
 extension Linewise {
-    func getLine(from: String?) -> (Range<String.Index>, Range<String.Index>)? {
+    func getLine(from: String?, startingAt: String.Index? = nil) -> (Range<String.Index>, Range<String.Index>)? {
         guard let maybeLine = from else { return nil }
         let lineStartIndex   = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
         let lineEndIndex     = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
         let contentsEndIndex = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
-        let firstZeroLengthRange = maybeLine.startIndex..<maybeLine.startIndex
+        let firstIndex = startingAt ?? maybeLine.startIndex
+        let firstZeroLengthRange = firstIndex..<firstIndex
         maybeLine.getLineStart(lineStartIndex, end: lineEndIndex, contentsEnd: contentsEndIndex, for: firstZeroLengthRange)
         return (lineStartIndex.pointee..<contentsEndIndex.pointee, lineStartIndex.pointee..<lineEndIndex.pointee)
     }
