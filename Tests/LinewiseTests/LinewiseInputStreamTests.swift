@@ -2,7 +2,7 @@ import XCTest
 import Foundation
 @testable import Linewise
 
-class LinewiseTests: XCTestCase {
+class LinewiseInputStreamTests: XCTestCase {
     func testGetLinesFromInputStream() {
         let stream = InputStream(data: Data(bytes: Array("hi\nhello".utf8)))
         XCTAssertEqual(Array(stream.lines()), ["hi", "hello"])
@@ -28,7 +28,7 @@ class LinewiseTests: XCTestCase {
         XCTAssertEqual(Array(stream.lines()), ["a"])
     }
 
-    static var allTests : [(String, (LinewiseTests) -> () throws -> Void)] {
+    static var allTests : [(String, (LinewiseInputStreamTests) -> () throws -> Void)] {
         return [
             ("testGetLinesFromInputStream", testGetLinesFromInputStream),
             ("testEmpty", testEmpty),
