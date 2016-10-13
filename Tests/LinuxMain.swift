@@ -3,4 +3,5 @@ import XCTest
 
 XCTMain([
      testCase(LinewiseInputStreamTests.allTests),
+     testCase(LinewiseStringTests.allTests),
 ])
