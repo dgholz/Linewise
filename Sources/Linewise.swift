@@ -54,9 +54,8 @@ extension InputStream : Linewise {
         if self.streamStatus == .notOpen { 
              self.open()
         }
-        let charsSeen: String? = nil
-        return sequence(state: charsSeen, next: { (myState: inout String?) -> String? in
-            return self.getLine(&myState)
+        return sequence(state: nil, next: { (charsSeen: inout String?) -> String? in
+            return self.getLine(&charsSeen)
         })
     }
 }
@@ -70,8 +69,7 @@ extension String : Linewise {
     }
 
     func lines() -> UnfoldSequence<String, String.Index> {
-        var consumedUpTo = self.startIndex
-        return sequence(state: consumedUpTo, next: { (myState: inout String.Index) -> String? in
+        return sequence(state: self.startIndex, next: { (consumedUpTo: inout String.Index) -> String? in
             return self.getLine(&consumedUpTo)
         })
     }
