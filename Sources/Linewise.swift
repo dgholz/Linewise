@@ -5,16 +5,15 @@ protocol Linewise {
     func lines() -> Seq
 }
 
-extension Linewise {
-    func getLine(from: String?, startingAt: String.Index? = nil) -> (Range<String.Index>, Range<String.Index>)? {
-        guard let maybeLine = from else { return nil }
+extension String {
+    func getLine(startingAt: String.Index? = nil) -> (Range<String.Index>, Range<String.Index>) {
         let lineStartIndex   = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
         let lineEndIndex     = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
         let contentsEndIndex = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
-        let firstIndex = startingAt ?? maybeLine.startIndex
+        let firstIndex = startingAt ?? self.startIndex
         let firstZeroLengthRange = firstIndex..<firstIndex
-        maybeLine.getLineStart(lineStartIndex, end: lineEndIndex, contentsEnd: contentsEndIndex, for: firstZeroLengthRange)
-        return (lineStartIndex.pointee..<contentsEndIndex.pointee, lineStartIndex.pointee..<lineEndIndex.pointee)
+        getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentsEndIndex, for: firstZeroLengthRange)
+        return (lineStartIndex..<contentsEndIndex, lineStartIndex..<lineEndIndex)
     }
 }
 
@@ -23,7 +22,7 @@ extension InputStream : Linewise {
     func getLine(_ charsSeen: inout String?) -> String? {
         
         while hasBytesAvailable || charsSeen?.isEmpty != true {
-           if let (lineContents, lineEnd) = getLine(from: charsSeen) {
+           if let (lineContents, lineEnd) = charsSeen?.getLine() {
                 if lineEnd.upperBound != charsSeen!.endIndex || lineEnd != lineContents {
                     defer { charsSeen!.removeSubrange(lineEnd) }
                     return charsSeen!.substring(with: lineContents)
@@ -66,7 +65,7 @@ extension InputStream : Linewise {
 extension String : Linewise {
     func getLine(_ consumedUpTo: inout String.Index) -> String? {
         guard consumedUpTo != self.endIndex else { return nil }
-        guard let (lineContents, lineEnd) = self.getLine(from: self, startingAt: consumedUpTo) else { return nil }
+        guard let (lineContents, lineEnd) = self.getLine(startingAt: consumedUpTo) else { return nil }
         defer { consumedUpTo = lineEnd.upperBound }
         return self.substring(with: lineContents)
     }
