@@ -61,16 +61,12 @@ extension InputStream : Linewise {
 }
 
 extension String : Linewise {
-    func getLine(_ consumedUpTo: inout String.Index) -> String? {
-        guard consumedUpTo != self.endIndex else { return nil }
-        guard let (lineContents, lineEnd) = self.getLine(startingAt: consumedUpTo) else { return nil }
-        defer { consumedUpTo = lineEnd.upperBound }
-        return self.substring(with: lineContents)
-    }
-
     func lines() -> UnfoldSequence<String, String.Index> {
         return sequence(state: self.startIndex, next: { (consumedUpTo: inout String.Index) -> String? in
-            return self.getLine(&consumedUpTo)
+            guard consumedUpTo != self.endIndex else { return nil }
+            let (lineContents, lineEnd) = self.getLine(startingAt: consumedUpTo)
+            defer { consumedUpTo = lineEnd.upperBound }
+            return self.substring(with: lineContents)
         })
     }
 }
