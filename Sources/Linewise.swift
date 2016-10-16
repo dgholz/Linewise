@@ -13,6 +13,7 @@ extension String {
         let firstIndex = startingAt ?? self.startIndex
         let firstZeroLengthRange = firstIndex..<firstIndex
         getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentsEndIndex, for: firstZeroLengthRange)
+        if lineStartIndex < firstIndex { lineStartIndex = firstIndex }
         return (lineStartIndex..<contentsEndIndex, lineStartIndex..<lineEndIndex)
     }
 }
