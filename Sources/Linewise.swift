@@ -23,12 +23,11 @@ extension InputStream : Linewise {
         
         while hasBytesAvailable || charsSeen?.isEmpty != true {
            if let (lineContents, lineEnd) = charsSeen?.getLine() {
-                if lineEnd.upperBound != charsSeen!.endIndex || lineEnd != lineContents {
-                    defer { charsSeen!.removeSubrange(lineEnd) }
-                    return charsSeen!.substring(with: lineContents)
-                }
-
-            }
+               if lineEnd.upperBound != charsSeen!.endIndex || lineEnd != lineContents {
+                   defer { charsSeen!.removeSubrange(lineEnd) }
+                   return charsSeen!.substring(with: lineContents)
+               }
+           }
     
             let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 4096)
             let bytesRead = read(buffer, maxLength: 4096)
@@ -73,7 +72,7 @@ extension String : Linewise {
     func lines() -> UnfoldSequence<String, String.Index> {
         var consumedUpTo = self.startIndex
         return sequence(state: consumedUpTo, next: { (myState: inout String.Index) -> String? in
-             return self.getLine(&consumedUpTo)
+            return self.getLine(&consumedUpTo)
         })
     }
 }
