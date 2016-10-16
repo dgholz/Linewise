@@ -7,9 +7,9 @@ protocol Linewise {
 
 extension String {
     func getLine(startingAt: String.Index? = nil) -> (Range<String.Index>, Range<String.Index>) {
-        let lineStartIndex   = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
-        let lineEndIndex     = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
-        let contentsEndIndex = UnsafeMutablePointer<String.Index>.allocate(capacity: 1)
+        var lineStartIndex           = self.startIndex
+        var lineEndIndex             = self.startIndex
+        var contentsEndIndex         = self.startIndex
         let firstIndex = startingAt ?? self.startIndex
         let firstZeroLengthRange = firstIndex..<firstIndex
         getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentsEndIndex, for: firstZeroLengthRange)
