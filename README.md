@@ -7,7 +7,7 @@ Swift protocol to add lines() to InputStreams & Strings. Line terminators get st
 
     # Package.swift
     dependencies: [
-        .Package(url: "https://github.com/dgholz/Linewise.git", majorVersion: 0),
+        .Package(url: "https://github.com/dgholz/Linewise.git", majorVersion: 1),
     ]
 
 
