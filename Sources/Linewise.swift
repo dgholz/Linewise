@@ -1,6 +1,6 @@
 import Foundation
 
-protocol Linewise {
+public protocol Linewise {
     associatedtype Seq : Sequence
     func lines() -> Seq
 }
@@ -51,7 +51,7 @@ extension InputStream : Linewise {
         return remaining
     }
 
-    func lines() -> UnfoldSequence<String, String?> {
+    public func lines() -> UnfoldSequence<String, String?> {
         if self.streamStatus == .notOpen { 
              self.open()
         }
@@ -62,7 +62,7 @@ extension InputStream : Linewise {
 }
 
 extension String : Linewise {
-    func lines() -> UnfoldSequence<String, String.Index> {
+    public func lines() -> UnfoldSequence<String, String.Index> {
         return sequence(state: self.startIndex, next: { (consumedUpTo: inout String.Index) -> String? in
             guard consumedUpTo != self.endIndex else { return nil }
             let (lineContents, lineEnd) = self.getLine(startingAt: consumedUpTo)
