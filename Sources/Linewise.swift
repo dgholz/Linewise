@@ -1,8 +1,7 @@
 import Foundation
 
 public protocol Linewise {
-    associatedtype Seq : Sequence
-    func lines() -> Seq
+    func lines() -> AnySequence<String>
 }
 
 extension String {
@@ -51,23 +50,23 @@ extension InputStream : Linewise {
         return remaining
     }
 
-    public func lines() -> UnfoldSequence<String, String?> {
+    public func lines() -> AnySequence<String> {
         if self.streamStatus == .notOpen { 
              self.open()
         }
-        return sequence(state: nil, next: { (charsSeen: inout String?) -> String? in
+        return AnySequence<String>(sequence(state: nil, next: { (charsSeen: inout String?) -> String? in
             return self.getLine(&charsSeen)
-        })
+        }))
     }
 }
 
 extension String : Linewise {
-    public func lines() -> UnfoldSequence<String, String.Index> {
-        return sequence(state: self.startIndex, next: { (consumedUpTo: inout String.Index) -> String? in
+    public func lines() -> AnySequence<String> {
+        return AnySequence<String>(sequence(state: self.startIndex, next: { (consumedUpTo: inout String.Index) -> String? in
             guard consumedUpTo != self.endIndex else { return nil }
             let (lineContents, lineEnd) = self.getLine(startingAt: consumedUpTo)
             defer { consumedUpTo = lineEnd.upperBound }
             return self.substring(with: lineContents)
-        })
+        }))
     }
 }
